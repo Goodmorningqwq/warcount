@@ -27,8 +27,7 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git config --local user.email "youremail@example.com"
-        git config --local user.name "Your Name"
-        git add war_counts.json WAR_COUNTS.md
-        git commit -m "Update war count leaderboard"
+        git add .github
+        git commit -m "Set up GitHub Actions for fetching war counts"
         git push
+
