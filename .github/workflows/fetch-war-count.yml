@@ -28,7 +28,7 @@ jobs:
 
     - name: Commit war counts data
       run: |
-        git config --global user.email "1v16mc@gmail.com"
+        git config --global user.email "adqrqdvgsg@gmail.com"
         git config --global user.name "hi"
         git add war_counts.json
         git commit -m "Update war counts"
