@@ -30,8 +30,13 @@ jobs:
         git config --local user.email "1v16mc@gmail.com"  # Set the email address
         git config --local user.name "goodmorning"  # Set your name
 
-    - name: Commit and push changes
+    - name: Commit and push changes (only if files exist)
       run: |
-        git add war_counts.json WAR_COUNTS.md
-        git commit -m "Update war count leaderboard"
-        git push
+        # Check if war_counts.json or WAR_COUNTS.md exists before attempting to add them
+        if [ -f "war_counts.json" ] || [ -f "WAR_COUNTS.md" ]; then
+          git add war_counts.json WAR_COUNTS.md
+          git commit -m "Update war count leaderboard"
+          git push
+        else
+          echo "No new files to commit."
+        fi
