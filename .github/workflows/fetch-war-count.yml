@@ -1,13 +1,13 @@
-name: Fetch War Counts
+name: Fetch Wynncraft War Counts
 
 on:
   schedule:
-    - cron: '0 * * * *'  # This schedules the action to run every hour
-  workflow_dispatch:  # This allows you to trigger it manually from the GitHub UI
+    - cron: "0 0 * * *"  # Run every day at midnight UTC
+  workflow_dispatch:  # Allows manual trigger via GitHub UI
 
 jobs:
   fetch-war-counts:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use an Ubuntu runner for the action
 
     steps:
     - name: Checkout repository
@@ -16,20 +16,27 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'  # You can adjust the version based on your requirements
+        node-version: '16'  # You can change the Node version if needed
 
     - name: Install dependencies
       run: |
-        npm install
+        npm install axios  # Install Axios (or other dependencies if needed)
 
-    - name: Fetch and update war counts
-      run: |
-        node fetchWarCounts.js
+    - name: Run fetchWarCounts script
+      run: node fetchWarCounts.js  # Run the script you created
 
-    - name: Commit war counts data
+    - name: Set Git identity
       run: |
-        git config --global user.email "adqrqdvgsg@gmail.com"
-        git config --global user.name "hi"
-        git add war_counts.json
-        git commit -m "Update war counts"
-        git push
+        git config --local user.email "1v16mc@gmail.com"  # Set the email address
+        git config --local user.name "hi"  # Set your name
+
+    - name: Commit and push changes (only if files exist)
+      run: |
+        # Check if war_counts.json or WAR_COUNTS.md exists before attempting to add them
+        if [ -f "war_counts.json" ] || [ -f "WAR_COUNTS.md" ]; then
+          git add war_counts.json WAR_COUNTS.md
+          git commit -m "Update war count leaderboard"
+          git push
+        else
+          echo "No new files to commit."
+        fi
