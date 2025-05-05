@@ -1,42 +1,44 @@
-name: Fetch Wynncraft War Counts
+name: Update War Counts
 
 on:
   schedule:
-    - cron: "0 0 * * *"  # Run every day at midnight UTC
-  workflow_dispatch:  # Allows manual trigger via GitHub UI
+    - cron: '0 * * * *' # Runs every hour
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
-  fetch-war-counts:
-    runs-on: ubuntu-latest  # Use an Ubuntu runner for the action
+  update-war-counts:
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'  # You can change the Node version if needed
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-    - name: Install dependencies
-      run: |
-        npm install axios  # Install Axios (or other dependencies if needed)
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run fetchWarCounts script
-      run: node fetchWarCounts.js  # Run the script you created
+      - name: Run war count script
+        run: node scripts/fetchWarCounts.js
 
-    - name: Set Git identity
-      run: |
-        git config --local user.email "1v16mc@gmail.com"  # Set the email address
-        git config --local user.name "hi"  # Set your name
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "1v16mc@gmail.com"
 
-    - name: Commit and push changes (only if files exist)
-      run: |
-        # Check if war_counts.json or WAR_COUNTS.md exists before attempting to add them
-        if [ -f "war_counts.json" ] || [ -f "WAR_COUNTS.md" ]; then
-          git add war_counts.json WAR_COUNTS.md
-          git commit -m "Update war count leaderboard"
-          git push
-        else
-          echo "No new files to commit."
-        fi
+      - name: Commit and push war count updates if present
+        run: |
+          if [ -f "war_counts.json" ] || [ -f "WAR_COUNTS.md" ]; then
+            git add war_counts.json WAR_COUNTS.md
+
+            if git diff --cached --quiet; then
+              echo "No changes to commit."
+            else
+              git commit -m "Update war count leaderboard"
+              git push
+            fi
+          else
+            echo "No new files to commit."
