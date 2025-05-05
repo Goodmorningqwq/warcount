@@ -25,9 +25,13 @@ jobs:
     - name: Run fetchWarCounts script
       run: node fetchWarCounts.js  # Run the script you created
 
+    - name: Set Git identity
+      run: |
+        git config --local user.email "1v16mc@gmail.com"  # Set the email address
+        git config --local user.name "goodmorning"  # Set your name
+
     - name: Commit and push changes
       run: |
-        git add .github
-        git commit -m "Set up GitHub Actions for fetching war counts"
+        git add war_counts.json WAR_COUNTS.md
+        git commit -m "Update war count leaderboard"
         git push
-
