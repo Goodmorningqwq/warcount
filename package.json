@@ -1,12 +1,23 @@
 {
-  "name": "war-count-fetcher",
+  "name": "warcount",
   "version": "1.0.0",
-  "description": "Fetches war counts for Wynncraft guild members and saves it to a JSON file.",
-  "main": "fetchWarCounts.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node fetchWarCounts.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Goodmorningqwq/warcount.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Goodmorningqwq/warcount/issues"
+  },
+  "homepage": "https://github.com/Goodmorningqwq/warcount#readme",
+  "description": "",
   "dependencies": {
-    "node-fetch": "^2.6.7"
+    "axios": "^1.9.0"
   }
 }
