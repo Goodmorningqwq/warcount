@@ -1,0 +1,34 @@
+name: Fetch Wynncraft War Counts
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Run every day at midnight UTC
+  workflow_dispatch:  # Allows manual trigger via GitHub UI
+
+jobs:
+  fetch-war-counts:
+    runs-on: ubuntu-latest  # Use an Ubuntu runner for the action
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # You can change the Node version if needed
+
+    - name: Install dependencies
+      run: |
+        npm install axios  # Install Axios (or other dependencies if needed)
+
+    - name: Run fetchWarCounts script
+      run: node fetchWarCounts.js  # Run the script you created
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "youremail@example.com"
+        git config --local user.name "Your Name"
+        git add war_counts.json WAR_COUNTS.md
+        git commit -m "Update war count leaderboard"
+        git push
